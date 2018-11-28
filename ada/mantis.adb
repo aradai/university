@@ -13,9 +13,12 @@ procedure Simulation is
     protected Printer is
         procedure Print(S: String);
     end Printer;
+
     protected body Printer is
-    begin
-        procedure Print(S: String) is begin Put_Line(S); end Put;
+        procedure Print(S: String) is 
+        begin
+            Put_Line(S);
+        end Print;
     end Printer;
 
     protected Random is
@@ -25,7 +28,6 @@ procedure Simulation is
     end Random;
 
     protected body Random is
-    begin
     function Random_Field return Field is
        begin
            Field_Random.Reset(G);
@@ -39,36 +41,59 @@ procedure Simulation is
     task Garden is
         entry Spray(F : Field_X);
         entry Jump(From, To : Field_X; Alive : out Boolean);
+        entry Mantisless(Is_Clear: out Boolean);
     end Garden;
 
     
     task body Mantis is
         Las_Pos: Field;
         Pos: Field := Random.Random_Field;
-        Alibe : Boolean := True;
+        Alive : Boolean := True;
     begin
         while Alive loop
             Las_Pos := Pos;
             Pos := Random.Random_Field;
             Garden.Jump(Las_Pos, Pos, Alive);
+            Printer.Print("Mantis jumped from " & Field'Image(Las_Pos)
+                            & " to " & Field'Image(Pos) & " and Alive = "
+                            & Boolean'Image(Alive)
+            );
             delay 1.5;
         end loop;
     end Mantis;
 
     task body Gardener is
-     
+        F:Field;
+        Is_Clear : Boolean := False; 
     begin
+        while not Is_Clear loop
+            F := Random.Random_Field;
+            Printer.Print("Gardener sprayed: " & Field'Image(F));
+            Garden.Spray(F);
+            delay 1.0;
+            Garden.Mantisless(Is_Clear);
+        end loop;
     end Gardener;
 
     task body Garden is
         Sprayed_Field : Field_X := 0;
-        Alive : Integer := 1; --hard coded, later it will be M
+        Clear_Garden : Boolean := False;
     begin
         loop
             select
-
+                accept Spray(F: Field_X) do
+                    Sprayed_Field := F;
+                end Spray;
             or
-
+                accept Jump (From, To: Field_X; Alive: out Boolean) do
+                    Alive := From /= Sprayed_Field and then 
+                                To /= Sprayed_Field;
+                    Clear_Garden := not Alive;
+                end Jump;
+            or
+                accept Mantisless (Is_Clear: out Boolean) do
+                    Is_Clear := Clear_Garden;
+                end Mantisless;
             or
                 terminate;
             end select;
