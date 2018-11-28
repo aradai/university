@@ -1,0 +1,53 @@
+A megadott szöveg:
+
+A feladat egy szimuláció elkészítése taszkok és védett egységek segítségével. 
+A szimulációk egy kertben történnek, ahol sáskák harcolnak egy kertésszel. 
+A szimuláció folyamatosan tájékoztassa a felhasználót arról, hogy kivel mi történik a konzolra kiírt üzenetekkel 
+(pl. "[Sáska#007] Átugrottam a 42-es parcellába"). 
+A konzolra kiíráshoz illetve a véletlenszám-generáláshoz használjunk egy közös védett egységet.
+
+A szimuláció akkor ér véget, ha vagy az összes sáska elpusztul vagy a kertész felhagy a permetezéssel. 
+A szimulációnak úgy kell véget érnie, hogy minden taszk hiba nélkül készre fut.
+
+Kettesért:
+
+Adott egy kert, amely K parcellát tartalmaz. 
+A kertbe egy sáska került az egyik parcellába véletlenszerûen. 
+A sáska idõnként véletlenszerûen parcellát vált. A kertész megpróbálja elpusztítani a sáskát, 
+ezért minden nap egy parcellát bepermetez irtószerrel. 
+Ha a sáska a permetezés után egy ilyen parcellába ugrik, vagy onnan elugrik, akkor megdöglik. 
+Az irtószer egy napig hat; a következő permetezés után az előző parcella nem tartalmaz káros anyagot.
+
+A kertész fáradhatatlan; addig jár permetezni, amíg a sáska el nem pusztul.
+
+Legyen K=10.
+
+
+
+Szebb jegyért:
+
+A sáskát nem sikerült elpusztítani, ezért lepetézett és született M utódja. 
+Az M+1 sáska véletlenszerűen ugrál a parcellák között, egymástól térben és időben függetlenül. 
+(Egy parcellában tetszőleges mennyiségű sáska elfér). 
+Az M+1 sáska ugyanannyira rosszul tűri az irtószert, mint az előző feladatban. 
+Kérjük be K és M értékét a felhasználótól.
+
+
+
+Még szebb jegyért:
+
+A kertész türelmetlen és ezért az előírt mennyiség N-szeresét használja az irtószerből (
+továbbra is egyszerre egy parcellán), ezért az N napig lesz aktív. 
+A hatás nem fokozódik (tehát ha egy egyszer már megpermetezett parcellát megpermetez, 
+akkor ott ugyanúgy a legutolsó permetezéstől számított N napig fognak a sáskák elpusztulni)
+
+Legyen N = 3.
+
+
+
+Még annál is szebb jegyért:
+
+A Hat Ízeltláb Állatvédő Szervezet örömére a kertész elfelejtett védőmaszkot venni a permetezéshez, 
+ezért 0.5 valószínűséggel a megengedettnél nagyobb mennyiségű permetezőszer kerül a szervezetébe. 
+Ha három egymást követő napon megtörténik a túladagolás, a kertész olyan rosszul lesz, 
+hogy felhagy a permetezéssel és elmegy birkapásztornak (egy másik ZH-feladatban).
