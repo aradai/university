@@ -1,0 +1,81 @@
+# Programozási Nyelvek (ADA), Generic Zárthelyi Dolgozat
+
+A feladat két részből fog állni, egy sabloneljárás implementálásából és egy Hash_Map container létrehozásából genericek segítségével. 
+A feladat megoldása folyamán kérjük, hogy jegyenként hozzanak létre egy új mappát, amelyben az adott jegyért csinálják meg a feladatot. 
+(Például a /3 mappában a programnak kettesért is és hármasért is kell működnie.) 
+Így például ha a hármas alrész működik, de a kettes nem, akkor megbukott. Így ajánlott jegyenként haladni. 
+A végén a gyakorlatvezető osztályoz! A funkcionális helyesség mellett a megoldás nyelvi szépségét, 
+a tanult nyelvi elemek használatának profizmusát is ugyanolyan hangsúllyal beszámítjuk az értékelésbe!
+
+A megoldáshoz használható az Ada Language Reference Manual.[http://locutus.web.elte.hu/ada/manual_reference/]
+
+## Kettesért
+
+Definiáljon egy sabloneljárást, amely segítségével egy bemenő tömb azon elemeit gyűjti ki egy új tömbbe, amely egy adott feltételt teljesít. 
+
+A sabloneljárás neve legyen `Filter_Value`. 
+Sablonparaméterként kell átadni egy indefinit tömb típust (`Item_Array`) az elemek (`Item`) és indexek (`Index`) típusával, 
+valamint egy `Condition` függvényt, mely az `Item` típuson értelmezett predikátum. (Kötelező ezeket az azonosítókat használni!)
+
+A sabloneljárásból példányosítható eljárásnak két paramétere legyen ebben a sorrendben: egy tömb (bemenő), és egy másik kimenő tömb.  
+A feladat, hogy a bemenő tömb minden elemén alkalmazva a `Condition` függvényt, ha igazat add vissza akkor tegyük bele az új tömbbe. 
+(Vegyük figyelembe, hogy a bemenő és a kimenő tömb tipusa ugyanaz.)
+
+## Hármasért
+
+Definiáljon egy sabloncsomagot, amelyben egy `Hash_Map` (magyarul *leképezés* ) átlátszatlan típust valósítja meg: 
+ez egy olyan adatszerkezet, amely értéket tartalmaz a hash helyen. Elsőként csak a `Put` és `Size` műveleteket kell készíteni hozzá. 
+Az előbbi elhelyez egy értéket a leképezésben a hash helyen, az utóbbi pedig lekéri, hogy aktuálisan hány elem található a `Hash_Map`-ben.
+Gondoskodjunk arról is, hogy a `Hash_Map` típusnak nincs egyéb művelete, például `=`.
+
+A leképezések típusát a `Hash_Maps` sabloncsomagban kell definiálni. 
+A sablon paraméterei a kulcsok (`Key`), az értékek (`Value`) (melyek nem korlátozott, definit típusok), a hash (`Hash`) függvény,  egy default érték (`No_Value`) amely (`Value`) típusú. 
+A `Hash` függvény a `Key` típusról `Positive` típusra alakít át.
+
+A sabloncsomag példányosításával kapható csomagban legyen a `Hash_Map` típus, 
+melynek diszrkiminánsa (`Capacity`) azt mondja meg, hogy legfeljebb hány értéket lehet a leképezésben eltárolni.
+
+A `Hash_Map` típus reprezentálására használjunk egy darab diszkriminánsos rekordot. 
+Ennek a diszkriminánsos rekordnak a belső állapotában egy olyan tömb fog szerepelni, 
+ amely `Value` értékeket tárol és `Positive` értékekkel indexxel. 
+ A tömb reprezentációjakor töltsük fel minden elemét `No_Value` értékkel. 
+ Ez a `Value` azt fogja jelenteni, hogy jelenleg azon a helyen nincs érték. (Olyan mintha üres lenne.)
+
+A `Hash_Map` típus `Insert` művelete kapjon egy `Hash_Map` típusú be- és kimenő paramétert, valamint egy kulcs és egy érték paramétert. 
+Elsőkörben a `Hash` függvény segítségével számítsuk ki a `Hash értéket`.
+Ellenőrizzük, hogy a tömb `Hash érték` helyén található-e elem. (Ha azon a helyen nem `No_Value`-es érték van akkor ott található elem.) 
+Abban az esetben `No_Value`-es elem található ott akkor írjuk felűl az érték paraméterrel.
+
+A `Size` függvény kapjon egy `Hash_Map` típusú bemenő paramétert és a `Hash_Map` aktuális méretével térjen vissza.
+
+## Négyesért
+
+Definiáljunk a következő függvényeket a `Hash_Maps` sabloncsomagon belül.
+
+Implementáljuk a `ContainsKey` függvényt, amely segítségével eldöntjük egy `Key` tipusról, hogy szerepel-e a tömbben. 
+A függvény kapjon egy `Hash_Map` típusú bemenő paramétert, valamint egy `Key` típusú értéket. 
+Először számoljuk ki a `Hash` függvény segítségével a `Hash értéket`. 
+Ellenőrizzük, hogy a tömb `Hash érték` helyén található-e elem. (Ha azon a helyen nem `No_Value`-es érték van akkor ott található elem.) 
+Abban az esetben `No_Value`-es elem található ott akkor adjunk vissza igazat egyébként hamist. 
+
+Változtassa meg az `Insert` függvényt, úgy hogy használja a `ContainsKey` függvényt.
+
+Továbbá írjunk egy `setValue` függvényt, amely a `Hash_Map` értékeit (`Value`) visszaadja. 
+Erre használjuk a korábban már megírt `Filter_Value` sabloneljárást. 
+(Ez azt jelenti, hogy abban az esetben, ha nem a `Filter_Value` sabloneljárást használja akkor a megoldást nem fogadható el!)
+
+## Ötösért
+
+Készítsen `For_Each` belső iterátort a `Hash_Map` típushoz. 
+A `For_Each` legyen egy sabloneljárás a `Hash_Maps` sabloncsomagban. 
+Sablonparaméterként kapjon egy olyan (`Action` nevű) eljárást, amelynek egy érték típusú bemenő és kimenő paramétere van. 
+A `For_Each` példányosításából származó eljárások kapjanak paraméterként egy `Hash_Map`-et, 
+és alkalmazzák az ebben a leképezésben található értékekre az `Action` sablonparaméternek megfeleltetett eljárást.
+
+Írjon egy `Remove` függvényt, amely segítségével a `Hash_Map` egy elemét ki tudjuk törölni a containerből. 
+A `Remove` függvény kapjon paraméterként egy `Hash_Map` be- és kimenő paramétert és egy `Key` típusú kulcsot. 
+A feladat, hogy a `Hash` függvény segítségével határozzuk meg a `Hash értéket` és a container azon elemét amely a `Hash érték` segítségével van definiálva írjuk felül `No_Value`-re. 
+Így ezzel definiáltunk egy törlés metódust a `Hash_Map`-hez.
+
+Jó munkát kívánunk,
+az Oktatók és Demonstrátorok
